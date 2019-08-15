@@ -44,6 +44,7 @@
 </header>
 
 <main class="container"><?=$main_content; ?></main>
+</div>
 
 <footer class="main-footer">
     <nav class="nav">
