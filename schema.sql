@@ -38,15 +38,12 @@ CREATE TABLE user (
     name_user CHAR(100) NOT NULL,
     password_user CHAR(20) NOT NULL,
     avatar CHAR(100),
-    contact CHAR(255) NOT NULL,
-    lot_id_list TEXT NOT NULL,
-    rates_id_list TEXT NOT NULL
+    contact CHAR(255) NOT NULL
 );
 
 CREATE INDEX name_lot ON lot(name_lot);
 CREATE INDEX name_user ON user(name_user);
 CREATE INDEX cat_id ON lot(cat_id);
 CREATE INDEX lot_id ON rate(lot_id);
-CREATE INDEX image_lot ON lot(image_lot);
 CREATE INDEX author_id ON lot(author_id);
 CREATE INDEX participant_id ON rate(participant_id);
