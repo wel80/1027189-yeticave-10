@@ -39,8 +39,8 @@ CREATE TABLE user (
     password_user CHAR(20) NOT NULL,
     avatar CHAR(100),
     contact CHAR(255) NOT NULL,
-    lot_id_list CHAR(255) NOT NULL,
-    rates_id_list CHAR(255) NOT NULL
+    lot_id_list TEXT NOT NULL,
+    rates_id_list TEXT NOT NULL
 );
 
 CREATE INDEX name_lot ON lot(name_lot);
