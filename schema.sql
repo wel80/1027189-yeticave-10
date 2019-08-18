@@ -14,7 +14,7 @@ CREATE TABLE lot (
     date_lot TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     name_lot CHAR(100) NOT NULL,
     cat_id INT NOT NULL,
-    description_lot CHAR(255),
+    description_lot TEXT,
     image_lot CHAR(100),
     author_id INT NOT NULL,
     initial_price DECIMAL,
@@ -45,3 +45,8 @@ CREATE TABLE user (
 
 CREATE INDEX name_lot ON lot(name_lot);
 CREATE INDEX name_user ON user(name_user);
+CREATE INDEX cat_id ON lot(cat_id);
+CREATE INDEX lot_id ON rate(lot_id);
+CREATE INDEX image_lot ON lot(image_lot);
+CREATE INDEX author_id ON lot(author_id);
+CREATE INDEX participant_id ON rate(participant_id);
