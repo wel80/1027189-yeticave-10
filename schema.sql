@@ -17,10 +17,10 @@ CREATE TABLE lot (
     description_lot TEXT,
     image_lot CHAR(100),
     author_id INT NOT NULL,
-    initial_price DECIMAL,
+    initial_price DECIMAL DEFAULT 0,
     completion_date TIMESTAMP NOT NULL,
-    step_rate DECIMAL,
-    winner_id INT NOT NULL
+    step_rate DECIMAL DEFAULT 0,
+    winner_id INT
 );
 
 CREATE TABLE rate (
