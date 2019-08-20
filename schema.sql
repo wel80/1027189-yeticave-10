@@ -11,21 +11,21 @@ CREATE TABLE category (
 
 CREATE TABLE lot (
     id_lot INT AUTO_INCREMENT PRIMARY KEY,
-    date_lot TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_lot DATETIME DEFAULT NOW(),
     name_lot CHAR(100) NOT NULL,
     cat_id INT NOT NULL,
     description_lot TEXT,
     image_lot CHAR(100),
     author_id INT NOT NULL,
-    initial_price DECIMAL,
-    completion_date TIMESTAMP NOT NULL,
-    step_rate DECIMAL,
-    winner_id INT NOT NULL
+    initial_price DECIMAL DEFAULT 0,
+    completion_date DATETIME NOT NULL,
+    step_rate DECIMAL DEFAULT 0,
+    winner_id INT
 );
 
 CREATE TABLE rate (
     id_rate INT AUTO_INCREMENT PRIMARY KEY,
-    date_rate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_rate DATETIME DEFAULT NOW(),
     bet_amount DECIMAL NOT NULL,
     participant_id INT NOT NULL,
     lot_id INT NOT NULL
@@ -33,7 +33,7 @@ CREATE TABLE rate (
 
 CREATE TABLE user (
     id_user INT AUTO_INCREMENT PRIMARY KEY,
-    date_registration TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date_registration DATETIME DEFAULT NOW(),
     e_mail CHAR(100) NOT NULL UNIQUE,
     name_user CHAR(100) NOT NULL,
     password_user CHAR(20) NOT NULL,
