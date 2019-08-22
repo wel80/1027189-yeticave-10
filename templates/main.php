@@ -27,7 +27,7 @@
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?=price_format(htmlspecialchars($val["price"])); ?></span>
+                                <span class="lot__cost"><?php if ($val["price_rate"]) {print(price_format(htmlspecialchars($val["price_rate"])));} else {print(price_format(htmlspecialchars($val["price"])));} ?></span>
                             </div>
                             <div class="lot__timer timer <?php if (rest_time($val["date_expiry"])[0] == '00') {print('timer—finishing');} ?>">
                                 <?php print((rest_time($val["date_expiry"])[0] . ' : ' . rest_time($val["date_expiry"])[1])); ?>
