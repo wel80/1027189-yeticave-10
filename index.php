@@ -2,16 +2,20 @@
 
 require_once('config.php');
 require_once('functions.php');
-require_once('data.php');
+/*require_once('data.php');*/
 
-$link = mysqli_init(); 
+/*$link = mysqli_init(); 
 mysqli_options($link, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, 1); 
-mysqli_real_connect($link, "localhost", "root", "", "yeticave_wel80");
+mysqli_real_connect($link, "localhost", "root", "1", "yeticave_wel80");*/
+
+ob_start();
+$link = mysqli_connect ("localhost", "root", "1", "yeticave_wel80");
+$result_connect_buffer = ob_get_clean();
 
 if (!$link) {
-    $main_content = mysqli_connect_error();
+    /*$main_content = mysqli_connect_error();*/
     $layout_content = include_template('error.php', [
-        'main_content' => 'Ошибка: ' . $main_content,
+        'main_content' => 'Ошибка: ' . $result_connect_buffer,
         'user_name' => $user_name,
         'title' => 'Ошибка',
         'is_auth' => $is_auth
