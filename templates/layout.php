@@ -52,7 +52,7 @@
             <!--заполните этот список из массива категорий-->
             <?php foreach ($category_list as $key => $val) { ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?=htmlspecialchars($val); ?></a>
+                    <a href="pages/all-lots.html"><?=htmlspecialchars($val['name_cat']); ?></a>
                 </li>
             <?php }; ?>
         </ul>
