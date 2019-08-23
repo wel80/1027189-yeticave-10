@@ -43,11 +43,14 @@
     </div>
 </header>
 
-<main class="container"><?=htmlspecialchars($main_content); ?></main>
+<main class="container">
+    <h3 class="main-error"><?=htmlspecialchars($main_content); ?></h3>
+</main>
 </div>
 
 <footer class="main-footer">
     <nav class="nav">
+        <ul class="nav__list container"></ul>
     </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
