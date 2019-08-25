@@ -50,7 +50,11 @@
 
 <footer class="main-footer">
     <nav class="nav">
-        <ul class="nav__list container"></ul>
+        <ul class="nav__list container">
+            <li class="nav__item">
+                <a href="pages/all-lots.html">Ошибка</a>
+            </li>
+        </ul>
     </nav>
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
