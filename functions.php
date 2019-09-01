@@ -67,12 +67,12 @@ function validateNumber($name) {
 };
 
 function validateDate($name) {
-    $date_format = date_create_from_format('Y-m-d', $_POST[$name]);
+    $date_format = is_date_valid($_POST[$name]);
     $date_end_unix = strtotime($_POST[$name]);
     $date_current_unix = time();
     $period_unix = $date_end_unix - $date_current_unix;
     if ($date_format && $period_unix > 86400) {
         return null;
     };
-    return "Введите дату в формате ГГГГ-ММ-ДД";
+    return "Введите дату в формате ГГГГ-ММ-ДД.<br>До окончания торгов должно оставаться не менее суток.";
 };

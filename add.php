@@ -14,13 +14,13 @@ $field_list = ['lot-name', 'category', 'message', 'lot-rate', 'lot-step', 'lot-d
 $error_list = [];
 $rule_list = [
     'lot-name' => function() {
-        return validateLength('lot-name', 1, 100);
+        return validateLength('lot-name', 5, 100);
     },
     'category' => function() use ($all_category_name) {
         return validateCategory('category', $all_category_name);
     },
     'message' => function() {
-        return validateLength('message', 5, 1000);
+        return validateLength('message', 10, 1000);
     },
     'lot-rate' => function() {
         return validateNumber('lot-rate');
@@ -36,7 +36,6 @@ $rule_list = [
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_lot = $_POST;
-    /*$new_lot['lot-date'] = '2019-09-30';*/
 
     foreach ($new_lot as $key => $value) {
         if (isset($rule_list[$key])) {
@@ -61,9 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $image_name = 'uploads/' . uniqid() . '.jpg';
         };
-
-        move_uploaded_file($_FILES['lot-img']['tmp_name'], $image_name);
-        $new_lot['lot-img'] = $image_name;
     };
 
     foreach ($field_list as $val) {
@@ -85,6 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
     } else {
+        move_uploaded_file($_FILES['lot-img']['tmp_name'], $image_name);
+        $new_lot['lot-img'] = $image_name;
 
         $insert_new_lot = 'INSERT INTO lot (name_lot, cat_id, description_lot, author_id, initial_price, step_rate, completion_date, image_lot) 
         VALUES (?, ?, ?, 1, ?, ?, ?, ?)';
