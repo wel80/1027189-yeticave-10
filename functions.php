@@ -26,9 +26,9 @@ function rest_time ($date_end) {
     return $time_expiry;
 };
 
-function include_template_error($customer, $auth_rand) {
+function include_template_error($message, $customer, $auth_rand) {
     $layout_content = include_template('error.php', [
-        'main_content' => 'Ошибка запроса на получение информации из базы данных',
+        'main_content' => $message,
         'user_name' => $customer,
         'title' => 'Ошибка',
         'is_auth' => $auth_rand

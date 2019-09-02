@@ -8,7 +8,8 @@ $link = mysqli_connect ($db['host'], $db['user'], $db['password'], $db['database
 $result_connect_buffer = ob_get_clean();
 
 if (!$link) {
-    include_template_error($user_name, $is_auth);
+    $message_error  = 'Ошибка: ' . $result_connect_buffer;
+    include_template_error($message_error, $user_name, $is_auth);
 };
 
 mysqli_set_charset($link, "utf8");

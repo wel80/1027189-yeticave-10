@@ -15,11 +15,12 @@
           <input id="lot-name" type="text" name="lot-name" placeholder="Введите наименование лота" value="<?=getPostVal('lot-name'); ?>">
           <span class="form__error"><?=$error_list['lot-name'] ?? ""; ?></span>
         </div>
-        <div class="form__item">
+        <div class="form__item <?=isset($error_list['category']) ? 'form__item--invalid' : ''; ?>">
             <label for="category">Категория <sup>*</sup></label>
             <select id="category" name="category">
+                <option value="">Выберите категорию</option>
                 <?php foreach ($category_list as $key => $val) { ?>
-                    <option><?=htmlspecialchars($val['name_cat']); ?></option>
+                    <option value="<?=$val['id_cat']; ?>"><?=htmlspecialchars($val['name_cat']); ?></option>
                 <?php }; ?>
             </select>
             <span class="form__error"><?=$error_list['category'] ?? ""; ?></span>

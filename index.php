@@ -12,7 +12,8 @@ GROUP BY id_lot
 ORDER BY date_lot DESC';
 $result_new_lot_list = mysqli_query($link, $query_new_lot_list);
 if ($result_new_lot_list === false) {
-    include_template_error($user_name, $is_auth);
+    $message_error  = 'Ошибка запроса на получение информации из базы данных';
+    include_template_error($message_error, $user_name, $is_auth);
 };
 $new_lot_list = mysqli_fetch_all($result_new_lot_list, MYSQLI_ASSOC);
 
@@ -20,7 +21,8 @@ $new_lot_list = mysqli_fetch_all($result_new_lot_list, MYSQLI_ASSOC);
 $query_category_list = 'SELECT name_cat, code_cat FROM category';
 $result_category_list = mysqli_query($link, $query_category_list);
 if ($result_category_list === false) {
-    include_template_error($user_name, $is_auth);
+    $message_error  = 'Ошибка запроса на получение информации из базы данных';
+    include_template_error($message_error, $user_name, $is_auth);
 };
 $all_category = mysqli_fetch_all($result_category_list, MYSQLI_ASSOC);
 
