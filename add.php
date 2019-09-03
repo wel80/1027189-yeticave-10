@@ -65,7 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($error_list)) {
         $main_content = include_template('main-add.php', [
             'category_list' => $all_category,
-            'error_list' => $error_list
+            'error_list' => $error_list,
+            'new_lot' => $new_lot
         ]);
 
     } else {
