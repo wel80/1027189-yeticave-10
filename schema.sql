@@ -37,7 +37,6 @@ CREATE TABLE user (
     e_mail CHAR(100) NOT NULL UNIQUE,
     name_user CHAR(100) NOT NULL,
     password_user CHAR(64) NOT NULL,
-    avatar CHAR(100),
     contact CHAR(255) NOT NULL
 );
 

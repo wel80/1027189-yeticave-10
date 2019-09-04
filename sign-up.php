@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result_insert_user) {
             header("Location: pages/login.html");
         } else {
-            $message_error  = 'Ошибка запроса на получение информации из базы данных';
+            $message_error  = 'При добавлении пользователя возникла ошибка в базе данных.';
             include_template_error($message_error, $user_name, $is_auth);
         };
     };
