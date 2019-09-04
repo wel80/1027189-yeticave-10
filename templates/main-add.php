@@ -20,7 +20,7 @@
             <select id="category" name="category">
                 <option value="">Выберите категорию</option>
                 <?php foreach ($category_list as $key => $val) { ?>
-                    <option value="<?=$val['id_cat']; ?>"><?=htmlspecialchars($val['name_cat']); ?></option>
+                <option value="<?=$val['id_cat']; ?>" <?php if (isset($new_lot['category']) && $val['id_cat'] == $new_lot['category']): ?>selected<?php endif; ?>><?=htmlspecialchars($val['name_cat']); ?></option>
                 <?php }; ?>
             </select>
             <span class="form__error"><?=$error_list['category'] ?? ""; ?></span>

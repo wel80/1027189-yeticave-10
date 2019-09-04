@@ -36,8 +36,7 @@ CREATE TABLE user (
     date_registration DATETIME DEFAULT NOW(),
     e_mail CHAR(100) NOT NULL UNIQUE,
     name_user CHAR(100) NOT NULL,
-    password_user CHAR(20) NOT NULL,
-    avatar CHAR(100),
+    password_user CHAR(64) NOT NULL,
     contact CHAR(255) NOT NULL
 );
 

@@ -76,3 +76,11 @@ function validateDate($name) {
     };
     return "Введите дату в формате ГГГГ-ММ-ДД.<br>До окончания торгов должно оставаться не менее суток.";
 };
+
+function validateEmail($name) {
+    $email_correct = filter_var($_POST[$name], FILTER_VALIDATE_EMAIL);
+    if ($email_correct) {
+        return null;
+    };
+    return "Укажите корректный адрес электронной почты";
+};
