@@ -1,7 +1,6 @@
 <?php
 require_once('init.php');
 
-
 if (empty($_GET['id'])) {
   exit(http_response_code(404));
 };
@@ -25,8 +24,7 @@ GROUP BY id_lot';
 $result_lot = mysqli_query($link, $query_lot);
 
 if ($result_lot === false) {
-  $message_error  = 'Ошибка запроса на получение информации из базы данных';
-  include_template_error($message_error, $user_name, $is_auth);
+  include_template_error('Ошибка запроса на получение информации из базы данных');
 };
 
 $is_lot = mysqli_fetch_assoc($result_lot);
@@ -36,17 +34,6 @@ if (!$is_lot) {
 };
 
 
-$query_category_list = 'SELECT name_cat, code_cat FROM category';
-$result_category_list = mysqli_query($link, $query_category_list);
-
-if ($result_category_list === false) {
-  $message_error  = 'Ошибка запроса на получение информации из базы данных';
-  include_template_error($message_error, $user_name, $is_auth);
-};
-
-$all_category = mysqli_fetch_all($result_category_list, MYSQLI_ASSOC);
-
-
 $main_content = include_template('main-lot.php', [
   'category_list' => $all_category,
   'is_lot' => $is_lot
@@ -54,10 +41,8 @@ $main_content = include_template('main-lot.php', [
 
 $layout_content = include_template('layout.php', [
   'main_content' => $main_content,
-  'user_name' => $user_name,
-  'title' => $is_lot['name'],
   'category_list' => $all_category,
-  'is_auth' => $is_auth
+  'title' => $is_lot['name']
 ]);
 
 print($layout_content);

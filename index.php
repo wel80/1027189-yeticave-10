@@ -1,7 +1,6 @@
 <?php
 require_once('init.php');
 
-
 $query_new_lot_list = 'SELECT id_lot, name_lot AS "name", name_cat AS "category", 
 initial_price AS "price", MAX(bet_amount) AS "price_rate", image_lot AS "image", completion_date AS "date_expiry"
 FROM lot
@@ -12,19 +11,9 @@ GROUP BY id_lot
 ORDER BY date_lot DESC';
 $result_new_lot_list = mysqli_query($link, $query_new_lot_list);
 if ($result_new_lot_list === false) {
-    $message_error  = 'Ошибка запроса на получение информации из базы данных';
-    include_template_error($message_error, $user_name, $is_auth);
+    include_template_error('Ошибка запроса на получение информации из базы данных');
 };
 $new_lot_list = mysqli_fetch_all($result_new_lot_list, MYSQLI_ASSOC);
-
-
-$query_category_list = 'SELECT name_cat, code_cat FROM category';
-$result_category_list = mysqli_query($link, $query_category_list);
-if ($result_category_list === false) {
-    $message_error  = 'Ошибка запроса на получение информации из базы данных';
-    include_template_error($message_error, $user_name, $is_auth);
-};
-$all_category = mysqli_fetch_all($result_category_list, MYSQLI_ASSOC);
 
 
 $main_content = include_template('main.php', [
@@ -34,10 +23,8 @@ $main_content = include_template('main.php', [
 
 $layout_content = include_template('layout.php', [
     'main_content' => $main_content,
-    'user_name' => $user_name,
-    'title' => 'Главная',
     'category_list' => $all_category,
-    'is_auth' => $is_auth
+    'title' => 'Главная'
 ]);
 
 print($layout_content);
