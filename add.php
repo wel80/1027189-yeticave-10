@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id_lot = mysqli_insert_id($link);
             header("Location: lot.php?id=" . $id_lot);
         } else {
-            include_template_error('Ошибка запроса на получение информации из базы данных');
+            include_template_error('При добавлении лота возникла ошибка в базе данных.');
         };
     };
 

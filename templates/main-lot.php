@@ -18,30 +18,7 @@
           <p class="lot-item__description"><?=htmlspecialchars($is_lot["description_lot"]); ?></p>
         </div>
         <div class="lot-item__right">
-          <div class="lot-item__state">
-            <div class="lot-item__timer timer <?=(rest_time($is_lot["date_expiry"])[0] == '00') ?'timer—finishing':''; ?>">
-              <?php print((rest_time($is_lot["date_expiry"])[0] . ' : ' . rest_time($is_lot["date_expiry"])[1])); ?>
-            </div>
-            <div class="lot-item__cost-state">
-              <div class="lot-item__rate">
-                <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=price_format(htmlspecialchars($is_lot["price_rate"] ? $is_lot["price_rate"] : $is_lot["price"])) ; ?></span>
-              </div>
-              <div class="lot-item__min-cost">
-                Мин. ставка <span><?=price_format(htmlspecialchars($is_lot["price_rate"] ? $is_lot["next_rate"] : $is_lot["first_rate"])); ?></span>
-              </div>
-            </div>
-            <!--
-            <form class="lot-item__form" action="https://echo.htmlacademy.ru" method="post" autocomplete="off">
-              <p class="lot-item__form-item form__item form__item--invalid">
-                <label for="cost">Ваша ставка</label>
-                <input id="cost" type="text" name="cost" placeholder="12 000">
-                <span class="form__error">Введите наименование лота</span>
-              </p>
-              <button type="submit" class="button">Сделать ставку</button>
-            </form>
-            -->
-          </div>
+          <?=$rate_content; ?>
           <!--
           <div class="history">
             <h3>История ставок (<span>10</span>)</h3>
