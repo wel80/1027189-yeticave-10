@@ -82,3 +82,67 @@ function validateEmail($name) {
     };
     return "Укажите корректный адрес электронной почты";
 };
+
+function passedTime($list) {
+    if ($list['period_day'] > 1) {
+        return ($list['day_month_year'] . ' в ' . $list['hour_min']);
+    } elseif ($list['period_day'] > 0) {
+        return ('Вчера в ' . $list['hour_min']);
+    } else {
+        $hour_int = ($list['period_min'] - $list['period_min'] % 60) / 60;
+        $min_int = $list['period_min'] % 60;
+        $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
+        $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
+        if ($hour_int > 0) {
+            return ($hour_int . ' ' . $hour_name . ' назад');
+        } elseif ($min_int > 0) {
+            return ($min_int . ' ' . $min_name . ' назад');
+        } else {
+            return ('Только что');
+        };
+    };
+};
+
+function rates_item($period, $id) {
+    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+        return ('rates__item--win');
+    } elseif ($period < 0) {
+        return ('rates__item--end');
+    } else {
+        return ('');
+    };
+};
+
+function rates_contact($period, $id, $con) {
+    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+        return $con;
+    } else {
+        return ('');
+    };
+};
+
+function rates_timer_class($period, $id) {
+    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+        return ('timer--win');
+    };
+
+    if ($period <= 0) {
+        return ('timer--end');
+    };
+
+    if ($period > 0 && $period <= 60) {
+        return ('timer--finishing');
+    };
+
+    return ('');
+};
+
+function rates_timer_content($period, $id, $date) {
+    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+        return ('Ставка выиграла');
+    } elseif ($period <= 0) {
+        return ('Торги окончены');
+    } else {
+        return (rest_time($date)[0] . ' : ' . rest_time($date)[1]);
+    };
+};

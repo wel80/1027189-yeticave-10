@@ -5,10 +5,10 @@
             <div class="lot-item__cost-state">
               <div class="lot-item__rate">
                 <span class="lot-item__amount">Текущая цена</span>
-                <span class="lot-item__cost"><?=price_format(htmlspecialchars($is_lot["price_rate"] ? $is_lot["price_rate"] : $is_lot["price"])) ; ?></span>
+                <span class="lot-item__cost"><?=price_format(htmlspecialchars($is_lot['current_price'])) ; ?></span>
               </div>
               <div class="lot-item__min-cost">
-                Мин. ставка <span><?=price_format(htmlspecialchars($is_lot["price_rate"] ? $is_lot["next_rate"] : $is_lot["first_rate"])); ?></span>
+                Мин. ставка <span><?=price_format(htmlspecialchars($is_lot['min_rate'])); ?></span>
               </div>
             </div>
             <form class="lot-item__form" action="lot.php?id=<?=$id; ?>" method="post" autocomplete="off">

@@ -2,7 +2,7 @@
 require_once('init.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $new_login = $_POST;
+    $candidate_login = $_POST;
     $error_list = [];
     $rule_list = [
         'email' => function() {
@@ -24,8 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error_list = array_filter($error_list);
     
     if (!count($error_list)) {
-        $new_email = mysqli_real_escape_string($link, $new_login['email']);
-        $query_user = "SELECT * FROM user WHERE e_mail = '$new_email'";
+        $candidate_email = mysqli_real_escape_string($link, $candidate_login['email']);
+        $query_user = "SELECT * FROM user WHERE e_mail = '$candidate_email'";
         $result_user = mysqli_query($link, $query_user);
         if ($result_user === false) {
             include_template_error('Ошибка запроса на получение информации из базы данных');
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = mysqli_fetch_assoc($result_user);
         if (!$user) {
             $error_list['email'] = 'Такой пользователь не найден';
-        }  elseif (!password_verify($new_login['password'], $user['password_user'])) {
+        }  elseif (!password_verify($candidate_login['password'], $user['password_user'])) {
             $error_list['password'] = 'Вы ввели неверный пароль.';
         } else {
             $_SESSION['user'] = $user;
