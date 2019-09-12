@@ -30,10 +30,10 @@
             </div>
           </td>
           <td class="rates__price">
-          <?=($val['bet_amount'] . ' p'); ?>
+          <?=price_format_rate($val['bet_amount']); ?>
           </td>
           <td class="rates__time">
-          <?=passedTime($val); ?>
+          <?=passedTime($val['period_day'], $val['period_min'], $val['day_month_year'], $val['hour_min']); ?>
           </td>
         </tr>
         <?php }; ?>

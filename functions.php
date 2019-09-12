@@ -12,6 +12,16 @@ function price_format($cost) {
     return ($cost_format . ' <b class="rub">р</b>');
 };
 
+function price_format_rate($cost) {
+    $cost_ceil = ceil($cost);
+    if ($cost_ceil >= 1000) {
+        $cost_format = number_format($cost_ceil, 0, ',', ' ');
+    } else {
+        $cost_format = $cost_ceil;
+    }
+    return ($cost_format . ' <span>р</span>');
+};
+
 function rest_time ($date_end) {
     date_default_timezone_set('Asia/Novosibirsk');
     $date_end_unix = strtotime($date_end);
@@ -83,14 +93,14 @@ function validateEmail($name) {
     return "Укажите корректный адрес электронной почты";
 };
 
-function passedTime($list) {
-    if ($list['period_day'] > 1) {
-        return ($list['day_month_year'] . ' в ' . $list['hour_min']);
-    } elseif ($list['period_day'] > 0) {
-        return ('Вчера в ' . $list['hour_min']);
+function passedTime($period_day, $period_min, $day_month_year, $hour_min) {
+    if ($period_day > 1) {
+        return ($day_month_year . ' в ' . $hour_min);
+    } elseif ($period_day > 0) {
+        return ('Вчера в ' . $hour_min);
     } else {
-        $hour_int = ($list['period_min'] - $list['period_min'] % 60) / 60;
-        $min_int = $list['period_min'] % 60;
+        $hour_int = ($period_min - $period_min % 60) / 60;
+        $min_int = $period_min % 60;
         $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
         $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
         if ($hour_int > 0) {

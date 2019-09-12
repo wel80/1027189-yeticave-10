@@ -12,7 +12,6 @@ if (!$id_get) {
 
 $id = intval($id_get);
 
-
 $query_lot = 'SELECT name_lot AS "name", name_cat AS "category", description_lot, author_id,
 initial_price AS "price", initial_price + step_rate AS "first_rate", MAX(bet_amount) AS "price_rate", 
 MAX(bet_amount) + step_rate AS "next_rate", image_lot AS "image", completion_date AS "date_expiry"
@@ -20,35 +19,53 @@ FROM lot
 LEFT JOIN category ON cat_id = id_cat
 LEFT JOIN rate ON id_lot = lot_id
 WHERE id_lot = ' . $id;
-$result_lot = mysqli_query($link, $query_lot);
 
-if ($result_lot === false) {
+$query_rate_list = 'SELECT name_user, bet_amount, participant_id,
+DATE_FORMAT(date_rate, "%d.%m.%y") AS "day_month_year",
+DATE_FORMAT(date_rate, "%H:%i") AS "hour_min",
+DATEDIFF(NOW(), date_rate) AS "period_day",
+TIMESTAMPDIFF(MINUTE, date_rate, NOW()) AS "period_min"
+FROM rate
+LEFT JOIN user ON participant_id = id_user
+WHERE lot_id = ' . $id . '
+ORDER BY bet_amount DESC';
+
+
+mysqli_query($link, "START TRANSACTION");
+$result_lot = mysqli_query($link, $query_lot);
+$result_rate_list = mysqli_query($link, $query_rate_list);
+
+if ($result_lot === false || $result_rate_list === false) {
+  mysqli_query($link, "ROLLBACK");
   include_template_error('Ошибка запроса на получение информации из базы данных');
 };
 
+mysqli_query($link, "COMMIT");
 $is_lot = mysqli_fetch_assoc($result_lot);
+$rate_list = mysqli_fetch_all($result_rate_list, MYSQLI_ASSOC);
 
 if (!$is_lot) {
   exit(http_response_code(404));
 };
 
+if ($rate_list) {
+  $rate_list_content = include_template('lot-rate-list.php', ['rate_list' => $rate_list]);
+} else {
+  $rate_list_content = '';
+};
+
 if ($is_lot['price_rate']) {
   $is_lot['current_price'] = $is_lot['price_rate'];
   $is_lot['min_rate'] = $is_lot['next_rate'];
+  $user_id_max_rate = $rate_list[0]['participant_id'];
 } else {
   $is_lot['current_price'] = $is_lot['price'];
   $is_lot['min_rate'] = $is_lot['first_rate'];
+  $user_id_max_rate = 0;
 };
-
-$query_user_id_max_rate = 'SELECT participant_id FROM rate WHERE lot_id= ' . $id . ' AND bet_amount = ' . $is_lot['current_price'];
-$result_user_id_max_rate = mysqli_query($link, $query_user_id_max_rate);
-if ($result_user_id_max_rate === false) {
-  include_template_error('Ошибка запроса на получение информации из базы данных');
-};
-$user_id_max_rate = mysqli_fetch_assoc($result_user_id_max_rate);
 
 if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtotime($is_lot['date_expiry']) > time() && 
-  $_SESSION['user']['id_user'] != $is_lot['author_id'] && $_SESSION['user']['id_user'] != $user_id_max_rate['participant_id']) {
+  $_SESSION['user']['id_user'] != $is_lot['author_id'] && $_SESSION['user']['id_user'] != $user_id_max_rate) {
 
   if (empty($_POST['cost'])) {
     $error = 'Это поле надо заполнить.';
@@ -65,7 +82,7 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
       $result_insert_rate = mysqli_stmt_execute($prepared_memo);
 
       if ($result_insert_rate) {
-        header("Location: my-bets.php");
+        header("Location: lot.php?id=$id");
       } else {
         include_template_error('При добавлении ставки возникла ошибка в базе данных.');
       };
@@ -78,8 +95,8 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
     'id' => $id
   ]);
 
-} elseif ((isset($_SESSION['user']) && strtotime($is_lot['date_expiry']) > time() && $_SESSION['user']['id_user'] != $is_lot['author_id'] 
-  && $_SESSION['user']['id_user'] != $user_id_max_rate['participant_id'])) {
+} elseif (isset($_SESSION['user']) && strtotime($is_lot['date_expiry']) > time() && $_SESSION['user']['id_user'] != $is_lot['author_id'] 
+  && $_SESSION['user']['id_user'] != $user_id_max_rate) {
   $rate_content = include_template('lot-rate.php', [
     'is_lot' => $is_lot,
     'error' => '',
@@ -93,7 +110,8 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
 $main_content = include_template('main-lot.php', [
   'category_list' => $all_category,
   'is_lot' => $is_lot,
-  'rate_content' => $rate_content
+  'rate_content' => $rate_content,
+  'rate_list_content' => $rate_list_content
 ]);
 
 $layout_content = include_template('layout.php', [
