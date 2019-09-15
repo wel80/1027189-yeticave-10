@@ -2,6 +2,7 @@
 session_start();
 require_once('config.php');
 require_once('functions.php');
+require_once("vendor/autoload.php");
 
 ob_start();
 $link = mysqli_connect ($db['host'], $db['user'], $db['password'], $db['database']);

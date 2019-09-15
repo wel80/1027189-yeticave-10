@@ -1,5 +1,5 @@
           <div class="lot-item__state">
-            <div class="lot-item__timer timer <?=(rest_time($is_lot["date_expiry"])[0] == '00') ? 'timer—finishing' : ''; ?>">
+            <div class="lot-item__timer timer <?=(rest_time($is_lot["date_expiry"])[0] == '00') ? 'timer--finishing' : ''; ?>">
               <?php print((rest_time($is_lot["date_expiry"])[0] . ' : ' . rest_time($is_lot["date_expiry"])[1])); ?>
             </div>
             <div class="lot-item__cost-state">

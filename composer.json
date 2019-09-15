@@ -1,0 +1,14 @@
+{
+    "name": "wel/1027189-yeticave-10",
+    "description": "Auction for the sale of sports equipment for winter sports",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Wel",
+            "email": "wel80@list.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0"
+    }
+}
