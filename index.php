@@ -1,5 +1,6 @@
 <?php
 require_once('init.php');
+require_once('getwinner.php');
 
 $query_new_lot_list = 'SELECT id_lot, name_lot AS "name", name_cat AS "category", 
 initial_price AS "price", MAX(bet_amount) AS "price_rate", image_lot AS "image", completion_date AS "date_expiry"
@@ -8,7 +9,8 @@ LEFT JOIN category ON cat_id = id_cat
 LEFT JOIN rate ON id_lot = lot_id
 WHERE completion_date > NOW()
 GROUP BY id_lot
-ORDER BY date_lot DESC';
+ORDER BY date_lot DESC
+LIMIT 9';
 $result_new_lot_list = mysqli_query($link, $query_new_lot_list);
 if ($result_new_lot_list === false) {
     include_template_error('Ошибка запроса на получение информации из базы данных');

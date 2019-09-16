@@ -12,7 +12,7 @@ if (!$id_get) {
 
 $id = intval($id_get);
 
-$query_lot = 'SELECT name_lot AS "name", name_cat AS "category", description_lot, author_id,
+$query_lot = 'SELECT name_lot AS "name", name_cat AS "category", description_lot, author_id, COUNT(id_rate) AS "count_rate",
 initial_price AS "price", initial_price + step_rate AS "first_rate", MAX(bet_amount) AS "price_rate", 
 MAX(bet_amount) + step_rate AS "next_rate", image_lot AS "image", completion_date AS "date_expiry"
 FROM lot
@@ -46,19 +46,13 @@ $rate_list = mysqli_fetch_all($result_rate_list, MYSQLI_ASSOC);
 
 if (!$is_lot) {
   exit(http_response_code(404));
-};
-
-if ($rate_list) {
-  $rate_list_content = include_template('lot-rate-list.php', ['rate_list' => $rate_list]);
-} else {
-  $rate_list_content = '';
-};
-
-if ($is_lot['price_rate']) {
+} elseif ($rate_list && $is_lot['count_rate'] && $is_lot['price_rate']) {
+  $rate_list_content = include_template('lot-rate-list.php', ['rate_list' => $rate_list, 'count_rate' => $is_lot['count_rate']]);
   $is_lot['current_price'] = $is_lot['price_rate'];
   $is_lot['min_rate'] = $is_lot['next_rate'];
   $user_id_max_rate = $rate_list[0]['participant_id'];
 } else {
+  $rate_list_content = '';
   $is_lot['current_price'] = $is_lot['price'];
   $is_lot['min_rate'] = $is_lot['first_rate'];
   $user_id_max_rate = 0;
