@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		} else {
             $rule = $rule_list[$key];
             $error_list[$key] = $rule();
-        };
-    };
+        }
+    }
     $error_list = array_filter($error_list);
     
     if (!count($error_list)) {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result_user = mysqli_query($link, $query_user);
         if ($result_user === false) {
             include_template_error('Ошибка запроса на получение информации из базы данных');
-        };
+        }
         $user = mysqli_fetch_assoc($result_user);
         if (!$user) {
             $error_list['email'] = 'Такой пользователь не найден';
@@ -38,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $_SESSION['user'] = $user;
             header("Location: index.php");
-        };
-    };
+        }
+    }
 
     $main_content = include_template('main-login.php', [
         'category_list' => $all_category,
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: /index.php");
 } else {
     $main_content = include_template('main-login.php', ['category_list' => $all_category]);
-};
+}
 
 $layout_content = include_template('layout.php', [
     'main_content' => $main_content,

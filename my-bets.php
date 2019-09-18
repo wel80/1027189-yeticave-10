@@ -14,12 +14,7 @@ if (isset($_SESSION['user'])) {
     LEFT JOIN rate ON id_lot = lot_id
     WHERE participant_id = ' . $_SESSION['user']['id_user'] . '
     ORDER BY date_rate DESC';
-
-    $result_my_bet_list = mysqli_query($link, $query_my_bet_list);
-    if ($result_my_bet_list === false) {
-        include_template_error('Ошибка запроса на получение информации из базы данных');
-    };
-    $my_bet_list = mysqli_fetch_all($result_my_bet_list, MYSQLI_ASSOC);
+    $my_bet_list = db_find_all($link, $query_my_bet_list);
     
     $main_content = include_template('main-bets.php', [
         'category_list' => $all_category,
@@ -27,7 +22,7 @@ if (isset($_SESSION['user'])) {
     ]);
 } else {
     exit(http_response_code(403));
-};
+}
 
 $layout_content = include_template('layout.php', [
     'main_content' => $main_content,

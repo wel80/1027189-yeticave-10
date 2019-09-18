@@ -11,11 +11,7 @@ WHERE completion_date > NOW()
 GROUP BY id_lot
 ORDER BY date_lot DESC
 LIMIT 9';
-$result_new_lot_list = mysqli_query($link, $query_new_lot_list);
-if ($result_new_lot_list === false) {
-    include_template_error('Ошибка запроса на получение информации из базы данных');
-};
-$new_lot_list = mysqli_fetch_all($result_new_lot_list, MYSQLI_ASSOC);
+$new_lot_list = db_find_all($link, $query_new_lot_list);
 
 
 $main_content = include_template('main.php', [
