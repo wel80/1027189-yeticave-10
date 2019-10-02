@@ -48,19 +48,17 @@ $category_lot_list = mysqli_fetch_all($result_category_lot_list, MYSQLI_ASSOC);
 
 $page_count = ($count_lot['quantity'] - $count_lot['quantity'] % 9) / 9 + 1;
 $page_list = range(1, $page_count);
+$not_lot = '<h2>В категории "' . $count_lot['name_cat'] . '" пока нет ни одного лота</h2>';
 
-if ($category_lot_list) {
-    $main_content = include_template('main-all-lots.php', [
-        'category_list' => $all_category,
-        'category_lot_list' => $category_lot_list,
-        'page_count' => $page_count,
-        'page_list' => $page_list,
-        'page_number' => $page_number,
-        'cat_number' => $cat_number
-    ]);
-} else {
-    $main_content = '<h2>В категории "' . $count_lot['name_cat'] . '" пока нет ни одного лота</h2>';
-}
+$main_content = include_template('main-all-lots.php', [
+    'category_list' => $all_category,
+    'category_lot_list' => $category_lot_list,
+    'page_count' => $page_count,
+    'page_list' => $page_list,
+    'page_number' => $page_number,
+    'cat_number' => $cat_number,
+    'not_lot' => $not_lot
+]);
 
 $layout_content = include_template('layout.php', [
   'main_content' => $main_content,
