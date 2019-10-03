@@ -2,7 +2,7 @@
 require_once('init.php');
 if (isset($_SESSION['user'])) {
     exit(http_response_code(403));
-};
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_account = $_POST;
@@ -28,8 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		} else {
             $rule = $rule_list[$key];
             $error_list[$key] = $rule();
-        };
-    };
+        }
+    }
     $error_list = array_filter($error_list);
     
     if (!count($error_list)) {
@@ -41,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         };
         if (mysqli_num_rows($result_email_id) > 0) {
             $error_list['email'] = 'Пользователь с таким адресом электронной почты уже зарегестрирован.';
-        };
-    };
+        }
+    }
 
     if (count($error_list)) {
         $main_content = include_template('main-sign-up.php', [
@@ -60,12 +60,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: login.php");
         } else {
             include_template_error('При добавлении пользователя возникла ошибка в базе данных.');
-        };
-    };
+        }
+    }
 
 } else {
     $main_content = include_template('main-sign-up.php', ['category_list' => $all_category]);
-};
+}
 
 $layout_content = include_template('layout.php', [
     'main_content' => $main_content,

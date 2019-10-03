@@ -2,7 +2,7 @@
 require_once('init.php');
 if (empty($_SESSION['user'])) {
     exit(http_response_code(403));
-};
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $new_lot = $_POST;
@@ -35,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		} else {
             $rule = $rule_list[$key];
             $error_list[$key] = $rule();
-        };
-	};
+        }
+	}
     $error_list = array_filter($error_list);
 
     if (empty($_FILES['lot-img']['name'])) {      
@@ -52,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         } else {
             $image_name = 'uploads/' . uniqid() . '.jpg';
-        };
-    };
+        }
+    }
 
     if (count($error_list)) {
         $main_content = include_template('main-add.php', [
@@ -77,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: lot.php?id=" . $id_lot);
         } else {
             include_template_error('При добавлении лота возникла ошибка в базе данных.');
-        };
-    };
+        }
+    }
 
 } else {
     $main_content = include_template('main-add.php', ['category_list' => $all_category]);
-};
+}
 
 $layout_content = include_template('layout.php', [
     'main_content' => $main_content,

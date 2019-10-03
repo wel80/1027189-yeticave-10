@@ -9,6 +9,7 @@
     </nav>
     <div class="container">
       <section class="lots">
+        <?php if ($category_lot_list) { ?>
         <h2>Все лоты в категории <span>«<?=$category_lot_list[0]['name_cat']; ?>»</span></h2>
         <ul class="lots__list">
             <?php foreach ($category_lot_list as $val) { ?>
@@ -30,8 +31,9 @@
                         </div>
                     </div>
                 </li>
-            <?php }; ?>
+            <?php } ?>
         </ul>
+        <?php } else { print($not_lot); } ?>
       </section>
       <?php if ($page_count > 1) { ?>
       <ul class="pagination-list">

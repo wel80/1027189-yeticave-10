@@ -8,7 +8,7 @@ if (empty($_GET['id'])) {
 $id_get = filter_var($_GET['id'], FILTER_VALIDATE_INT);
 if (!$id_get) {
   exit(http_response_code(404));
-};
+}
 
 $id = intval($id_get);
 
@@ -38,7 +38,7 @@ $result_rate_list = mysqli_query($link, $query_rate_list);
 if ($result_lot === false || $result_rate_list === false) {
   mysqli_query($link, "ROLLBACK");
   include_template_error('Ошибка запроса на получение информации из базы данных');
-};
+}
 
 mysqli_query($link, "COMMIT");
 $is_lot = mysqli_fetch_assoc($result_lot);
@@ -56,7 +56,7 @@ if (!$is_lot) {
   $is_lot['current_price'] = $is_lot['price'];
   $is_lot['min_rate'] = $is_lot['first_rate'];
   $user_id_max_rate = 0;
-};
+}
 
 if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtotime($is_lot['date_expiry']) > time() && 
   $_SESSION['user']['id_user'] != $is_lot['author_id'] && $_SESSION['user']['id_user'] != $user_id_max_rate) {
@@ -79,9 +79,9 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
         header("Location: lot.php?id=$id");
       } else {
         include_template_error('При добавлении ставки возникла ошибка в базе данных.');
-      };
-    };
-  };
+      }
+    }
+  }
 
   $rate_content = include_template('lot-rate.php', [
     'is_lot' => $is_lot,
@@ -99,7 +99,7 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
 
 } else {
   $rate_content = '';
-};
+}
 
 $main_content = include_template('main-lot.php', [
   'category_list' => $all_category,
