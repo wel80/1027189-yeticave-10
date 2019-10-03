@@ -46,3 +46,5 @@ CREATE INDEX cat_id ON lot(cat_id);
 CREATE INDEX lot_id ON rate(lot_id);
 CREATE INDEX author_id ON lot(author_id);
 CREATE INDEX participant_id ON rate(participant_id);
+
+CREATE FULLTEXT INDEX search ON lot(name_lot, description_lot);
