@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST)) {
     $candidate_login = $_POST;
     $error_list = [];
     $rule_list = [
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     foreach ($rule_list as $key => $val) {
-		if (empty($_POST[$key])) {
+		if (!isset($_POST[$key]) || empty($_POST[$key])) {
             $error_list[$key] = 'Это поле надо заполнить.';
 		} else {
             $rule = $rule_list[$key];

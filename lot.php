@@ -14,7 +14,8 @@ $id = intval($id_get);
 
 $query_lot = 'SELECT name_lot AS "name", name_cat AS "category", description_lot, author_id, COUNT(id_rate) AS "count_rate",
 initial_price AS "price", initial_price + step_rate AS "first_rate", MAX(bet_amount) AS "price_rate", 
-MAX(bet_amount) + step_rate AS "next_rate", image_lot AS "image", completion_date AS "date_expiry"
+MAX(bet_amount) + step_rate AS "next_rate", image_lot AS "image", completion_date AS "date_expiry",
+TIMESTAMPDIFF(MINUTE, NOW(), completion_date) AS "completion_period"
 FROM lot
 LEFT JOIN category ON cat_id = id_cat
 LEFT JOIN rate ON id_lot = lot_id
@@ -61,9 +62,7 @@ if (!$is_lot) {
 if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtotime($is_lot['date_expiry']) > time() && 
   $_SESSION['user']['id_user'] != $is_lot['author_id'] && $_SESSION['user']['id_user'] != $user_id_max_rate) {
 
-  if (empty($_POST['cost'])) {
-    $error = 'Это поле надо заполнить.';
-  } else {
+  if (isset($_POST['cost']) && !empty($_POST['cost'])) {
     $new_rate_filter = filter_var($_POST['cost'], FILTER_VALIDATE_INT);
     $new_rate = intval($new_rate_filter);
     if ($new_rate < 1) {
@@ -81,9 +80,11 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
         include_template_error('При добавлении ставки возникла ошибка в базе данных.');
       }
     }
+  } else {
+    $error = 'Это поле надо заполнить.';
   }
 
-  $rate_content = include_template('lot-rate.php', [
+  $right_content = include_template('lot-rate.php', [
     'is_lot' => $is_lot,
     'error' => $error,
     'id' => $id
@@ -91,20 +92,23 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
 
 } elseif (isset($_SESSION['user']) && strtotime($is_lot['date_expiry']) > time() && $_SESSION['user']['id_user'] != $is_lot['author_id'] 
   && $_SESSION['user']['id_user'] != $user_id_max_rate) {
-  $rate_content = include_template('lot-rate.php', [
+  $right_content = include_template('lot-rate.php', [
     'is_lot' => $is_lot,
     'error' => '',
     'id' => $id
   ]);
 
 } else {
-  $rate_content = '';
+  $right_content = include_template('lot-price.php', [
+    'is_lot' => $is_lot,
+    'session_user_id' => 0
+  ]);
 }
 
 $main_content = include_template('main-lot.php', [
   'category_list' => $all_category,
   'is_lot' => $is_lot,
-  'rate_content' => $rate_content,
+  'right_content' => $right_content,
   'rate_list_content' => $rate_list_content
 ]);
 
