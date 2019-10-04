@@ -25,7 +25,7 @@ $offset = ($page_number - 1) * 9;
 $query_count_lot = 'SELECT COUNT(id_lot) AS "quantity", name_cat 
 FROM lot 
 INNER JOIN category ON cat_id = id_cat
-WHERE cat_id = ' . $cat_number;
+WHERE cat_id = ' . $cat_number . ' AND completion_date > NOW()';
 $query_category_lot_list = 'SELECT image_lot, name_lot, name_cat, id_lot, initial_price, MAX(bet_amount) AS "rate_price", completion_date
 FROM lot
 LEFT JOIN category ON cat_id = id_cat

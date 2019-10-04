@@ -4,7 +4,7 @@ if (isset($_SESSION['user'])) {
     exit(http_response_code(403));
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST)) {
     $new_account = $_POST;
     $error_list = [];
     $rule_list = [
@@ -23,11 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     foreach ($rule_list as $key => $val) {
-		if (empty($_POST[$key])) {
-            $error_list[$key] = 'Это поле надо заполнить.';
-		} else {
+		if (isset($_POST[$key]) && !empty($_POST[$key])) {
             $rule = $rule_list[$key];
             $error_list[$key] = $rule();
+		} else {
+            $error_list[$key] = 'Это поле надо заполнить.';
         }
     }
     $error_list = array_filter($error_list);

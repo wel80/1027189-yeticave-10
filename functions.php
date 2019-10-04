@@ -45,11 +45,18 @@ function include_template_error($message) {
 }
 
 function getPostVal($name) {
-    return $_POST[$name] ?? ""; 
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST[$name])) {
+        return htmlspecialchars($_POST[$name]); 
+    }
+    return '';
 }
 
 function validateCategory($name, $allowed_list) {
-    $category_name = $_POST[$name];
+    if (isset($_POST[$name])) {
+        $category_name = $_POST[$name];
+    } else {
+        $category_name = '';
+    }
 
     if (!in_array($category_name, $allowed_list)) {
         return "Указана несуществующая категория";
@@ -58,7 +65,11 @@ function validateCategory($name, $allowed_list) {
 }
 
 function validateLength($name, $min, $max) {
-    $len = strlen($_POST[$name]);
+    if (isset($_POST[$name])) {
+        $len = strlen($_POST[$name]);
+    } else {
+        $len = 0;
+    }
 
     if ($len < $min or $len > $max) {
         return "Значение должно быть от $min до $max символов";
@@ -67,7 +78,12 @@ function validateLength($name, $min, $max) {
 }
 
 function validateNumber($name) {
-    $number = filter_var($_POST[$name], FILTER_VALIDATE_INT);
+    if (isset($_POST[$name])) {
+        $number = filter_var($_POST[$name], FILTER_VALIDATE_INT);
+    } else {
+        $number = 0;
+    }
+
     if ($number < 1) {
         return "Укажите целое число больше нуля";
     }
@@ -75,8 +91,14 @@ function validateNumber($name) {
 }
 
 function validateDate($name) {
-    $date_format = is_date_valid($_POST[$name]);
-    $date_end_unix = strtotime($_POST[$name]);
+    if (isset($_POST[$name])) {
+        $date_format = is_date_valid($_POST[$name]);
+        $date_end_unix = strtotime($_POST[$name]);
+    } else {
+        $date_format = null;
+        $date_end_unix = 0;
+    }
+
     $date_current_unix = time();
     $period_unix = $date_end_unix - $date_current_unix;
     if ($date_format && $period_unix > 86400) {
@@ -86,7 +108,11 @@ function validateDate($name) {
 }
 
 function validateEmail($name) {
-    $email_correct = filter_var($_POST[$name], FILTER_VALIDATE_EMAIL);
+    if (isset($_POST[$name])) {
+        $email_correct = filter_var($_POST[$name], FILTER_VALIDATE_EMAIL);
+    } else {
+        $email_correct = null;
+    }
     if ($email_correct) {
         return null;
     }
@@ -98,41 +124,38 @@ function passedTime($period_day, $period_min, $day_month_year, $hour_min) {
         return ($day_month_year . ' в ' . $hour_min);
     } elseif ($period_day > 0) {
         return ('Вчера в ' . $hour_min);
-    } else {
-        $hour_int = ($period_min - $period_min % 60) / 60;
-        $min_int = $period_min % 60;
-        $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
-        $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
-        if ($hour_int > 0) {
-            return ($hour_int . ' ' . $hour_name . ' назад');
-        } elseif ($min_int > 0) {
-            return ($min_int . ' ' . $min_name . ' назад');
-        } else {
-            return ('Только что');
-        }
     }
+    $hour_int = ($period_min - $period_min % 60) / 60;
+    $min_int = $period_min % 60;
+    $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
+    $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
+    if ($hour_int > 0) {
+        return ($hour_int . ' ' . $hour_name . ' назад');
+    } elseif ($min_int > 0) {
+        return ($min_int . ' ' . $min_name . ' назад');
+    }
+    return ('Только что');    
 }
 
 function rates_item($period, $id) {
-    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+    if ($period <= 0 && $id === $_SESSION['user']['id_user']) {
         return ('rates__item--win');
     } elseif ($period < 0) {
         return ('rates__item--end');
-    } else {
-        return ('');
     }
+    return ('');
+    
 }
 
 function rates_contact($period, $id, $con) {
-    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+    if ($period <= 0 && $id === $_SESSION['user']['id_user']) {
         return $con;
-    } else {
-        return ('');
     }
+    return ('');
 }
 
 function rates_timer_class($period, $id) {
-    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+    if ($period <= 0 && $id === $_SESSION['user']['id_user']) {
         return ('timer--win');
     }
 
@@ -148,13 +171,12 @@ function rates_timer_class($period, $id) {
 }
 
 function rates_timer_content($period, $id, $date) {
-    if ($period <= 0 && $id == $_SESSION['user']['id_user']) {
+    if ($period <= 0 && $id === $_SESSION['user']['id_user']) {
         return ('Ставка выиграла');
     } elseif ($period <= 0) {
         return ('Торги окончены');
-    } else {
-        return (rest_time($date)[0] . ' : ' . rest_time($date)[1]);
     }
+    return (rest_time($date)[0] . ' : ' . rest_time($date)[1]);
 }
 
 function db_find_all($connect, $query) {

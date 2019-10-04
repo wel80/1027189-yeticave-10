@@ -18,7 +18,7 @@
           <p class="lot-item__description"><?=htmlspecialchars($is_lot["description_lot"]); ?></p>
         </div>
         <div class="lot-item__right">
-          <?=$rate_content; ?>
+          <?=$right_content; ?>
           <?=$rate_list_content; ?>
         </div>
       </div>
