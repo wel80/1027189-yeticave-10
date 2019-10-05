@@ -3,11 +3,11 @@
         <p class="promo__text">На нашем интернет-аукционе ты найдёшь самое эксклюзивное сноубордическое и горнолыжное снаряжение.</p>
         <ul class="promo__list">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($category_list as $key => $val) { ?>
-                <li class="promo__item promo__item--<?=htmlspecialchars($val['code_cat']); ?>">
-                    <a class="promo__link" href="all-lots.php?cat=<?=$val['id_cat']; ?>"><?=htmlspecialchars($val['name_cat']); ?></a>
+            <?php foreach ($category_list as $val) { ?>
+                <li class="promo__item promo__item--<?=isset($val['code_cat']) ? htmlspecialchars($val['code_cat']) : ''; ?>">
+                    <a class="promo__link" href="all-lots.php?cat=<?=isset($val['id_cat']) ? $val['id_cat'] : ''; ?>"><?=isset($val['name_cat']) ? htmlspecialchars($val['name_cat']) : ''; ?></a>
                 </li>
-            <?php }; ?>
+            <?php } ?>
         </ul>
     </section>
     <section class="lots">
@@ -19,22 +19,22 @@
             <?php foreach ($advertising_list as $key => $val) { ?>
                 <li class="lots__item lot">
                     <div class="lot__image">
-                        <img src="<?=htmlspecialchars($val["image"]); ?>" width="350" height="260" alt="<?=htmlspecialchars($val["name"]); ?>">
+                        <img src="<?=isset($val["image"]) ? htmlspecialchars($val["image"]) : ''; ?>" width="350" height="260" alt="<?=isset($val["name"]) ? htmlspecialchars($val["name"]) : ''; ?>">
                     </div>
                     <div class="lot__info">
-                        <span class="lot__category"><?=htmlspecialchars($val["category"]); ?></span>
-                        <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=$val["id_lot"]; ?>"><?=htmlspecialchars($val["name"]); ?></a></h3>
+                        <span class="lot__category"><?=isset($val["category"]) ? htmlspecialchars($val["category"]) : ''; ?></span>
+                        <h3 class="lot__title"><a class="text-link" href="lot.php?id=<?=isset($val["id_lot"]) ? $val["id_lot"] : ''; ?>"><?=isset($val["name"]) ? htmlspecialchars($val["name"]) : ''; ?></a></h3>
                         <div class="lot__state">
                             <div class="lot__rate">
                                 <span class="lot__amount">Стартовая цена</span>
-                                <span class="lot__cost"><?=price_format(htmlspecialchars( ($val["price_rate"]) ? $val["price_rate"] : $val["price"]) ) ; ?></span>
+                                <span class="lot__cost"><?=isset($val["price_rate"]) ? price_format($val["price_rate"]) : price_format(isset($val["price"]) ? $val["price"] : ''); ?></span>
                             </div>
-                            <div class="lot__timer timer <?=(rest_time($val["date_expiry"])[0] == '00') ?'timer--finishing':''; ?>">
-                                <?php print((rest_time($val["date_expiry"])[0] . ' : ' . rest_time($val["date_expiry"])[1])); ?>
+                            <div class="lot__timer timer <?=isset($val["date_expiry"]) && rest_time($val["date_expiry"])[0] === '00' ? 'timer--finishing' : ''; ?>">
+                                <?=isset($val["date_expiry"]) ? rest_time($val["date_expiry"])[0] . ' : ' . rest_time($val["date_expiry"])[1] : ''; ?>
                             </div>
                         </div>
                     </div>
                 </li>
-            <?php }; ?>
+            <?php } ?>
         </ul>
     </section>

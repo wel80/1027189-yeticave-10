@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-if (empty($_GET['cat'])) {
+if (!isset($_GET['cat']) || empty($_GET['cat'])) {
     exit(http_response_code(404));
 } else {
     $cat_number_validate = filter_var($_GET['cat'], FILTER_VALIDATE_INT);
@@ -11,7 +11,7 @@ if (empty($_GET['cat'])) {
     $cat_number = intval($cat_number_validate);
 }
 
-if (empty($_GET['page'])) {
+if (!isset($_GET['page']) || empty($_GET['page'])) {
     $page_number = 1;
 } else {
     $page_number_validate = filter_var($_GET['page'], FILTER_VALIDATE_INT);
@@ -48,7 +48,7 @@ $category_lot_list = mysqli_fetch_all($result_category_lot_list, MYSQLI_ASSOC);
 
 $page_count = ($count_lot['quantity'] - $count_lot['quantity'] % 9) / 9 + 1;
 $page_list = range(1, $page_count);
-$not_lot = '<h2>В категории "' . $count_lot['name_cat'] . '" пока нет ни одного лота</h2>';
+$not_lot = '<h2>В категории "' . htmlspecialchars($count_lot['name_cat']) . '" пока нет ни одного лота</h2>';
 
 $main_content = include_template('main-all-lots.php', [
     'category_list' => $all_category,

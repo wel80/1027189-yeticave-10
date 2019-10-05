@@ -26,7 +26,7 @@
         <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
             <?php if (isset($_SESSION['user'])) { ?>
                 <div class="user-menu__logged">
-                    <p><?=$_SESSION['user']['name_user']; ?></p>
+                    <p><?=isset($_SESSION['user']['name_user']) ? htmlspecialchars($_SESSION['user']['name_user']) : ''; ?></p>
                     <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
                     <a class="user-menu__logout" href="logout.php">Выход</a>
                 </div>
@@ -39,23 +39,23 @@
                         <a href="login.php">Вход</a>
                     </li>
                 </ul>
-            <?php }; ?>
+            <?php } ?>
         </nav>
     </div>
 </header>
 
-<main class="container"><?=$main_content; ?></main>
+<main class="container"><?=isset($main_content) ? $main_content : ''; ?></main>
 </div>
 
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
             <!--заполните этот список из массива категорий-->
-            <?php foreach ($category_list as $key => $val) { ?>
+            <?php foreach ($category_list as $val) { ?>
                 <li class="nav__item">
-                    <a href="all-lots.php?cat=<?=$val['id_cat']; ?>"><?=($val['name_cat']); ?></a>
+                    <a href="all-lots.php?cat=<?=isset($val['id_cat']) ? htmlspecialchars($val['id_cat']) : ''; ?>"><?=isset($val['name_cat']) ? htmlspecialchars($val['name_cat']) : ''; ?></a>
                 </li>
-            <?php }; ?>
+            <?php } ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">

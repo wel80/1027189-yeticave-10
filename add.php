@@ -1,6 +1,6 @@
 <?php
 require_once('init.php');
-if (empty($_SESSION['user'])) {
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     exit(http_response_code(403));
 }
 
