@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 
-if (empty($_GET['id'])) {
+if (!isset($_GET['id']) || empty($_GET['id'])) {
   exit(http_response_code(404));
 };
 
@@ -60,7 +60,7 @@ if (!$is_lot) {
 }
 
 if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtotime($is_lot['date_expiry']) > time() && 
-  $_SESSION['user']['id_user'] != $is_lot['author_id'] && $_SESSION['user']['id_user'] != $user_id_max_rate) {
+  $_SESSION['user']['id_user'] !== $is_lot['author_id'] && $_SESSION['user']['id_user'] !== $user_id_max_rate) {
 
   if (isset($_POST['cost']) && !empty($_POST['cost'])) {
     $new_rate_filter = filter_var($_POST['cost'], FILTER_VALIDATE_INT);
@@ -90,11 +90,10 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
     'id' => $id
   ]);
 
-} elseif (isset($_SESSION['user']) && strtotime($is_lot['date_expiry']) > time() && $_SESSION['user']['id_user'] != $is_lot['author_id'] 
-  && $_SESSION['user']['id_user'] != $user_id_max_rate) {
+} elseif (isset($_SESSION['user']) && strtotime($is_lot['date_expiry']) > time() && $_SESSION['user']['id_user'] !== $is_lot['author_id'] 
+  && $_SESSION['user']['id_user'] !== $user_id_max_rate) {
   $right_content = include_template('lot-rate.php', [
     'is_lot' => $is_lot,
-    'error' => '',
     'id' => $id
   ]);
 

@@ -5,6 +5,7 @@
     <title><?=$title; ?></title>
     <link href="../css/normalize.min.css" rel="stylesheet">
     <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/flatpickr.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-wrapper">
@@ -25,7 +26,7 @@
         <!-- здесь должен быть PHP код для показа меню и данных пользователя -->
             <?php if (isset($_SESSION['user'])) { ?>
                 <div class="user-menu__logged">
-                    <p><?=$_SESSION['user']['name_user']; ?></p>
+                    <p><?=isset($_SESSION['user']['name_user']) ? htmlspecialchars($_SESSION['user']['name_user']) : ''; ?></p>
                     <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
                     <a class="user-menu__logout" href="logout.php">Выход</a>
                 </div>
@@ -38,7 +39,7 @@
                         <a href="login.php">Вход</a>
                     </li>
                 </ul>
-            <?php }; ?>
+            <?php } ?>
         </nav>
     </div>
 </header>
@@ -51,9 +52,12 @@
 <footer class="main-footer">
     <nav class="nav">
         <ul class="nav__list container">
-            <li class="nav__item">
-                <a>Ошибка</a>
-            </li>
+            <!--заполните этот список из массива категорий-->
+            <?php foreach ($category_list as $val) { ?>
+                <li class="nav__item">
+                    <a href="all-lots.php?cat=<?=isset($val['id_cat']) ? htmlspecialchars($val['id_cat']) : ''; ?>"><?=isset($val['name_cat']) ? htmlspecialchars($val['name_cat']) : ''; ?></a>
+                </li>
+            <?php } ?>
         </ul>
     </nav>
     <div class="main-footer__bottom container">
@@ -98,7 +102,7 @@
     </div>
 </footer>
 
-<script src="flatpickr.js"></script>
-<script src="script.js"></script>
+<script src="../flatpickr.js"></script>
+<script src="../script.js"></script>
 </body>
 </html>

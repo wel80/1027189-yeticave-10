@@ -22,7 +22,7 @@ foreach ($lot_ended_list as $val) {
             include_template_error('Ошибка запроса на запись информации в базу данных');
         }
 
-        $lot_url = 'http://' . $_SERVER['SERVER_NAME'] . '/lot.php?id=' . $lot_winner['lot_id'];
+        $lot_url = 'http://' . $_SERVER['SERVER_NAME'] . '/lot.php?id=' . htmlspecialchars($lot_winner['lot_id']);
         $rate_list_url = 'http://' . $_SERVER['SERVER_NAME'] . '/my-bets.php';
 
         $transport = new Swift_SmtpTransport("phpdemo.ru", 25);
