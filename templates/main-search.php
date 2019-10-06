@@ -1,6 +1,6 @@
     <nav class="nav">
       <ul class="nav__list container">
-      <?php foreach ($category_list as $val) { ?>
+        <?php foreach ($category_list as $val) { ?>
           <li class="nav__item">
             <a href="all-lots.php?cat=<?=isset($val['id_cat']) ? $val['id_cat'] : ''; ?>"><?=isset($val['name_cat']) ? htmlspecialchars($val['name_cat']) : ''; ?></a>
           </li>
@@ -34,7 +34,7 @@
             <?php } ?>
         </ul>
         <?php } elseif (isset($search_text)) { 
-          print('<h2>Ничего не найдено по запросу: "' . htmlspecialchars($search_text) . '"</h2>'); 
+          print('<h2>Ничего не найдено по запросу «' . htmlspecialchars($search_text) . '»</h2>'); 
         } else {
           print('<h2>Вы направили пустой запрос</h2>');
         } ?>
@@ -45,7 +45,7 @@
           <a href="search.php?page=<?=isset($page_number) && $page_number > 1 ? htmlspecialchars($page_number) - 1 : htmlspecialchars($page_number); ?>&search=<?=isset($search_text) ? htmlspecialchars($search_text) : ''; ?>">Назад</a>
         </li>
         <?php foreach ($page_list as $val) { ?>
-        <li class="pagination-item<?=isset($page_number) && $page_number === $val ? ' pagination-item-active' : ''; ?>">
+        <li class="pagination-item <?=isset($page_number) && $page_number === $val ? 'pagination-item-active' : ''; ?>">
           <a href="search.php?page=<?=$val; ?>&search=<?=isset($search_text) ? htmlspecialchars($search_text) : ''; ?>"><?=$val; ?></a>
         </li>
         <?php } ?>

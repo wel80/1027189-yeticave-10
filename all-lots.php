@@ -1,24 +1,24 @@
 <?php
 require_once('init.php');
 
-if (!isset($_GET['cat']) || empty($_GET['cat'])) {
-    exit(http_response_code(404));
-} else {
+if (isset($_GET['cat'])) {
     $cat_number_validate = filter_var($_GET['cat'], FILTER_VALIDATE_INT);
     if (!$cat_number_validate) {
         exit(http_response_code(404));
     }
     $cat_number = intval($cat_number_validate);
+} else {
+    exit(http_response_code(404));
 }
 
-if (!isset($_GET['page']) || empty($_GET['page'])) {
-    $page_number = 1;
-} else {
+if (isset($_GET['page'])) {
     $page_number_validate = filter_var($_GET['page'], FILTER_VALIDATE_INT);
     if (!$page_number_validate) {
         exit(http_response_code(404));
     }
     $page_number = intval($page_number_validate);
+} else {
+    $page_number = 1;;
 }
 $offset = ($page_number - 1) * 9;
 

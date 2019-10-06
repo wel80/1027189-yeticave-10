@@ -195,38 +195,39 @@ function validateEmail($name) {
  * 2 часа назад
  * 15 минут назад
  * Только что
- * @param int $period_day - количество дней
- * @param int $period_min - количесво минут
- * @param string $day_month_year - дата в формате ДД.ММ.ГГ
- * @param string $hour_min - время в формате ЧЧ.ММ
+ * @param array $bet_content - Ассоциативный массив с данными по одной ставке
  */
-function passedTime($period_day, $period_min, $day_month_year, $hour_min) {
-    if ($period_day > 1) {
-        return (htmlspecialchars($day_month_year) . ' в ' . htmlspecialchars($hour_min));
-    } elseif ($period_day > 0) {
-        return ('Вчера в ' . htmlspecialchars($hour_min));
+function passedTime($bet_content) {
+    if (isset($bet_content['period_day']) && isset($bet_content['day_month_year']) && isset($bet_content['hour_min']) && $bet_content['period_day'] > 1) {
+        return (htmlspecialchars($bet_content['day_month_year']) . ' в ' . htmlspecialchars($bet_content['hour_min']));
+    } elseif (isset($bet_content['period_day']) && isset($bet_content['hour_min']) && $bet_content['period_day'] > 0) {
+        return ('Вчера в ' . htmlspecialchars($bet_content['hour_min']));
     }
-    $hour_int = ($period_min - $period_min % 60) / 60;
-    $min_int = $period_min % 60;
-    $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
-    $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
-    if ($hour_int > 0) {
-        return (htmlspecialchars($hour_int) . ' ' . htmlspecialchars($hour_name) . ' назад');
-    } elseif ($min_int > 0) {
-        return (htmlspecialchars($min_int) . ' ' . htmlspecialchars($min_name) . ' назад');
+
+    if (isset($bet_content['period_min'])) {
+        $hour_int = ($bet_content['period_min'] - $bet_content['period_min'] % 60) / 60;
+        $min_int = $bet_content['period_min'] % 60;
+        $hour_name = get_noun_plural_form($hour_int, 'час', 'часа', 'часов');
+        $min_name = get_noun_plural_form($min_int, 'минуту', 'минуты', 'минут');
+    
+        if ($hour_int > 0) {
+            return (htmlspecialchars($hour_int) . ' ' . htmlspecialchars($hour_name) . ' назад');
+        } elseif ($min_int > 0) {
+            return (htmlspecialchars($min_int) . ' ' . htmlspecialchars($min_name) . ' назад');
+        }
     }
-    return ('Только что');    
+    return ('Только что');
 }
 
 /**
  * Возвращает имя класса для строки таблцы показа ставок
- * @param int $period - количесво минут до окончания торгов
- * @param int $id - Идентификационный номер победителя торгов
+ * @param array $bet_content - Ассоциативный массив с данными по одной ставке
  */
-function rates_item($period, $id) {
-    if ($period <= 0 && isset($id) && $id === $_SESSION['user']['id_user']) {
+function rates_item($bet_content) {
+    if (isset($bet_content['completion_period']) && $bet_content['completion_period'] < 0 && isset($bet_content['winner_id']) 
+    && isset($_SESSION['user']['id_user']) && $bet_content['winner_id'] === $_SESSION['user']['id_user']) {
         return ('rates__item--win');
-    } elseif ($period < 0) {
+    } elseif (isset($bet_content['completion_period']) && $bet_content['completion_period'] <= 0) {
         return ('rates__item--end');
     }
     return ('');
@@ -235,32 +236,31 @@ function rates_item($period, $id) {
 
 /**
  * Возвращает контактные данные автора лота
- * @param int $period - количесво минут до окончания торгов
- * @param int $id - Идентификационный номер победителя торгов
- * @param string $con - Контактные данные автора лота
+ * @param array $bet_content - Ассоциативный массив с данными по одной ставке
  */
-function rates_contact($period, $id, $con) {
-    if ($period <= 0 && isset($id) && $id === $_SESSION['user']['id_user']) {
-        return htmlspecialchars($con);
+function rates_contact($bet_content) {
+    if (isset($bet_content['completion_period']) && isset($bet_content['winner_id']) && isset($bet_content['contact']) && 
+    isset($_SESSION['user']['id_user']) && $bet_content['completion_period'] < 0 && $bet_content['winner_id'] === $_SESSION['user']['id_user']) {
+        return htmlspecialchars($bet_content['contact']);
     }
     return ('');
 }
 
 /**
  * Возвращает имя класса для блока показа остатка времени
- * @param int $period - количесво минут до окончания торгов
- * @param int $id - Идентификационный номер победителя торгов
+ * @param array $bet_content - Ассоциативный массив с данными по одной ставке
  */
-function rates_timer_class($period, $id) {
-    if ($period <= 0 && isset($id) && $id === $_SESSION['user']['id_user']) {
+function rates_timer_class($bet_content) {
+    if (isset($bet_content['completion_period']) && isset($bet_content['winner_id']) && isset($_SESSION['user']['id_user']) &&
+    $bet_content['completion_period'] < 0 && $bet_content['winner_id'] === $_SESSION['user']['id_user']) {
         return ('timer--win');
     }
 
-    if ($period <= 0) {
+    if (isset($bet_content['completion_period']) && $bet_content['completion_period'] < 0) {
         return ('timer--end');
     }
 
-    if ($period > 0 && $period <= 60) {
+    if (isset($bet_content['completion_period']) && $bet_content['completion_period'] > 0 && $bet_content['completion_period'] <= 60) {
         return ('timer--finishing');
     }
 
@@ -269,17 +269,20 @@ function rates_timer_class($period, $id) {
 
 /**
  * Возвращает строку с данными для блока показа остатка времени до окончания торгов
- * @param int $period - количесво минут до окончания торгов
- * @param int $id - Идентификационный номер победителя торгов
- * @param string $date - Дата окончания торгов
+ * @param array $bet_content - Ассоциативный массив с данными по одной ставке
  */
-function rates_timer_content($period, $id, $date) {
-    if ($period <= 0 && isset($id) && $id === $_SESSION['user']['id_user']) {
-        return ('Ставка выиграла');
-    } elseif ($period <= 0) {
-        return ('Торги окончены');
+function rates_timer_content($bet_content) {
+    if (isset($bet_content['completion_period']) && isset($bet_content['winner_id']) && isset($_SESSION['user']['id_user']) && 
+    $bet_content['completion_period'] < 0 && $bet_content['winner_id'] === $_SESSION['user']['id_user']) {
+        return 'Ставка выиграла';
+    } elseif (isset($bet_content['completion_period']) && $bet_content['completion_period'] < 0) {
+        return 'Торги окончены';
     }
-    return htmlspecialchars(rest_time($date)[0] . ' : ' . rest_time($date)[1]);
+
+    if (isset($bet_content['completion_date'])) {
+        return htmlspecialchars(rest_time($bet_content['completion_date'])[0] . ' : ' . rest_time($bet_content['completion_date'])[1]);
+    }
+    return '';
 }
 
 /**
