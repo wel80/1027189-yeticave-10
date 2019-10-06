@@ -98,10 +98,7 @@ if (isset($_SESSION['user']) && $_SERVER['REQUEST_METHOD'] === 'POST' && strtoti
   ]);
 
 } else {
-  $right_content = include_template('lot-price.php', [
-    'is_lot' => $is_lot,
-    'session_user_id' => 0
-  ]);
+  $right_content = include_template('lot-price.php', ['is_lot' => $is_lot]);
 }
 
 $main_content = include_template('main-lot.php', [

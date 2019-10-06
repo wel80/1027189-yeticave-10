@@ -15,6 +15,7 @@ if (isset($_GET['page'])) {
 } else {
     $page_number = 1;
 }
+$offset = ($page_number - 1) * 9;
 
 if ($search_text) {
     $query_count_lot = 'SELECT COUNT(id_lot) AS "quantity" 
@@ -27,9 +28,6 @@ if ($search_text) {
         include_template_error('Ошибка запроса на получение информации из базы данных');
     }
     $count_lot = mysqli_fetch_assoc($result_count_lot)['quantity'];
-    $page_count = ($count_lot - $count_lot % 9) / 9 + 1;
-    $page_list = range(1, $page_count);
-    $offset = ($page_number - 1) * 9;
 
     $query_search_lot_list = 'SELECT image_lot, name_lot, name_cat, id_lot, initial_price, MAX(bet_amount) AS "rate_price", completion_date
     FROM lot
@@ -48,6 +46,8 @@ if ($search_text) {
     $search_lot_list = mysqli_fetch_all($result_search_lot_list, MYSQLI_ASSOC);
 
     if ($search_lot_list && $count_lot) {
+        $page_count = ($count_lot - $count_lot % 9) / 9 + 1;
+        $page_list = range(1, $page_count);
         $main_content = include_template('main-search.php', [
             'category_list' => $all_category,
             'search_lot_list' => $search_lot_list,
