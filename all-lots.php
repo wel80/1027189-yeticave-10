@@ -46,7 +46,11 @@ mysqli_query($link, "COMMIT");
 $count_lot = mysqli_fetch_assoc($result_count_lot);
 $category_lot_list = mysqli_fetch_all($result_category_lot_list, MYSQLI_ASSOC);
 
-$page_count = ($count_lot['quantity'] - $count_lot['quantity'] % 9) / 9 + 1;
+if ($count_lot['quantity'] % 9 === 0) {
+    $page_count = $count_lot['quantity'] / 9;
+} else {
+    $page_count = ($count_lot['quantity'] - $count_lot['quantity'] % 9) / 9 + 1;
+}
 $page_list = range(1, $page_count);
 $not_lot = '<h2>В категории "' . htmlspecialchars($count_lot['name_cat']) . '" пока нет ни одного лота</h2>';
 
